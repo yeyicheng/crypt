@@ -53,4 +53,28 @@ public class OneTimePadTest {
 		assertTrue(OneTimePad.binToHex("1001").equals("9"));
 		assertTrue(OneTimePad.binToHex("11000000").equals("c0"));
 	}
+
+	@Test
+	public void genKeySpaceTest(){
+		int[] sp1 = {1};
+		assertTrue(OneTimePad.genSpaceStr(sp1).startsWith(("0020")));
+		int[] sp2 = {};
+		assertTrue(Integer.valueOf(OneTimePad.genSpaceStr(sp2)) == 0);
+		int[] sp3 = {2, 4, 6};
+		assertTrue(OneTimePad.genSpaceStr(sp3).startsWith("00002000200020"));
+	}
+	
+	@Test
+	public void extractKeyTest(){
+		String mix = "0011003d4d891f";
+		int[] sp1 = {1};
+		assertTrue(OneTimePad.extractKey(mix, sp1).get(1).equals("11"));
+		int[] sp2 = {};
+		assertTrue(OneTimePad.extractKey(mix, sp2).get(1) == null);
+		int[] sp3 = {2, 4, 6};
+		assertTrue(OneTimePad.extractKey(mix, sp3).get(1) == null);
+		assertTrue(OneTimePad.extractKey(mix, sp3).get(2).equals("00"));
+		assertTrue(OneTimePad.extractKey(mix, sp3).get(4).equals("4d"));
+		assertTrue(OneTimePad.extractKey(mix, sp3).get(6).equals("1f"));
+	}
 }

@@ -1,10 +1,10 @@
-import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.HashMap;
 
 public class OneTimePad {
 	final static int SPACE = 0x20;
 	static HashMap<Integer, ArrayList<Integer>> map = new HashMap<Integer, ArrayList<Integer>>();
+	static HashMap<Integer, String> key = new HashMap<Integer, String>();
 
 	static String stringToAscii(String s) {
 		String out = "";
@@ -22,16 +22,16 @@ public class OneTimePad {
 	static char asciiToChar(String s) {
 		return (char) (int) Integer.valueOf(s);
 	}
-	
+
 	static ArrayList<String> asciiToChar(ArrayList<String> l) {
 		ArrayList<String> ll = new ArrayList<String>();
-		for (String c : l){
-			ll.add(""+(char)(int) Integer.valueOf(c));
+		for (String c : l) {
+			ll.add("" + (char) (int) Integer.valueOf(c));
 		}
-		System.out.println(ll);
+		// System.out.println(ll);
 		return ll;
 	}
-	
+
 	static String decToHex(String s) {
 		String out = "";
 		String[] in = s.split(" ");
@@ -77,12 +77,12 @@ public class OneTimePad {
 	static ArrayList<String> hexToDec(String c, int op) {
 		ArrayList<String> dec = new ArrayList<String>();
 		ArrayList<String> hex = splitHex(c);
-		for (String s : hex){
+		for (String s : hex) {
 			dec.add(Integer.valueOf(s, 16).toString());
 		}
 		return dec;
 	}
-	
+
 	static String hexToDec(String c) {
 		return Integer.valueOf(c, 16).toString();
 	}
@@ -221,7 +221,7 @@ public class OneTimePad {
 		}
 		if (temp.length() > 0)
 			list.add(temp);
-//		System.out.println(list);
+		// System.out.println(list);
 		return list;
 	}
 
@@ -248,47 +248,139 @@ public class OneTimePad {
 		}
 		return list;
 	}
-	
+
+	static HashMap<Integer, Boolean> toMap(int[] list) {
+		HashMap<Integer, Boolean> out = new HashMap<Integer, Boolean>();
+		for (int i = 0; i < 500; i++) {
+			out.put(i, false);
+		}
+		for (int i = 0; i < list.length; i++) {
+			out.put(list[i], true);
+		}
+		return out;
+	}
+
+	static String genSpaceStr(int[] spaces) {
+		String out = "";
+		HashMap<Integer, Boolean> in = toMap(spaces);
+		for (int i = 0; i < 200; i++) {
+			if (in.get(i)) {
+				out += "20";
+			} else {
+				out += "00";
+			}
+		}
+		return out;
+	}
+
 	static ArrayList<Integer> findSpaceCandidate(String x, int first, int second) {
 		ArrayList<String> list = asciiToChar(hexToDec(x, 1));
 		ArrayList<String> spaces = new ArrayList<String>();
 		ArrayList<Integer> indices = new ArrayList<Integer>();
-		spaces.add("A");spaces.add("B");spaces.add("C");spaces.add("D");spaces.add("E");
-		spaces.add("F");spaces.add("G");spaces.add("H");spaces.add("I");spaces.add("J");
-		spaces.add("K");spaces.add("L");spaces.add("M");spaces.add("N");spaces.add("O");
-		spaces.add("P");spaces.add("Q");spaces.add("R");spaces.add("S");spaces.add("T");
-		spaces.add("U");spaces.add("V");spaces.add("W");spaces.add("X");spaces.add("Y");
-		spaces.add("Z");spaces.add("a");spaces.add("b");spaces.add("c");spaces.add("d");
-		spaces.add("e");spaces.add("f");spaces.add("g");spaces.add("h");spaces.add("i");spaces.add("j");
-		spaces.add("k");spaces.add("l");spaces.add("m");spaces.add("n");spaces.add("o");
-		spaces.add("p");spaces.add("q");spaces.add("r");spaces.add("s");spaces.add("t");
-		spaces.add("u");spaces.add("v");spaces.add("w");spaces.add("x");spaces.add("y");
-		spaces.add("z");spaces.add(" ");
+		spaces.add("A");
+		spaces.add("B");
+		spaces.add("C");
+		spaces.add("D");
+		spaces.add("E");
+		spaces.add("F");
+		spaces.add("G");
+		spaces.add("H");
+		spaces.add("I");
+		spaces.add("J");
+		spaces.add("K");
+		spaces.add("L");
+		spaces.add("M");
+		spaces.add("N");
+		spaces.add("O");
+		spaces.add("P");
+		spaces.add("Q");
+		spaces.add("R");
+		spaces.add("S");
+		spaces.add("T");
+		spaces.add("U");
+		spaces.add("V");
+		spaces.add("W");
+		spaces.add("X");
+		spaces.add("Y");
+		spaces.add("Z");
+		spaces.add("a");
+		spaces.add("b");
+		spaces.add("c");
+		spaces.add("d");
+		spaces.add("e");
+		spaces.add("f");
+		spaces.add("g");
+		spaces.add("h");
+		spaces.add("i");
+		spaces.add("j");
+		spaces.add("k");
+		spaces.add("l");
+		spaces.add("m");
+		spaces.add("n");
+		spaces.add("o");
+		spaces.add("p");
+		spaces.add("q");
+		spaces.add("r");
+		spaces.add("s");
+		spaces.add("t");
+		spaces.add("u");
+		spaces.add("v");
+		spaces.add("w");
+		spaces.add("x");
+		spaces.add("y");
+		spaces.add("z");
+		// spaces.add(" ");
+		// System.out.print("x" + first + "+x" + second + ": ");
+		// System.out.println(list);
 		System.out.print("x" + first + "+x" + second + ": ");
-		System.out.println(list);
-		for (int i = 0; i < list.size(); i++){
+		for (int i = 0; i < list.size(); i++) {
 			if (spaces.contains(list.get(i)))
+				// System.out.print(list.get(i));
 				indices.add(i);
-//				System.out.print(i + " ");
+			else if ((int) list.get(i).charAt(0) == 0)
+				System.out.print("double " + i + " ");
+			// System.out.print(i + " ");
 		}
-//		System.out.println();
+		System.out.println(indices);
+		// System.out.println();
 		return indices;
 	}
 
+	public static HashMap<Integer, String> extractKey(String mix,
+			int[] positions) {
+		ArrayList<String> split = splitHex(mix);
+		HashMap<Integer, Boolean> in = toMap(positions);
+		for (int i = 0; i < split.size(); i++) {
+			if (in.get(i)) {
+				key.put(i, split.get(i));
+			}
+		}
+		return key;
+	}
+
+	public static String buildKey() {
+		String temp = "";
+		for (int i = 0; i < 200; i++) {
+			if (key.get(i) != null) {
+				temp += key.get(i);
+			} else {
+				temp += "00";
+			}
+		}
+		return temp;
+	}
+
 	public static void main(String[] args) {
-		for (int i = 65; i <= 90; i++){
-			for (int j = 97; j <= 122; j++){
+		for (int i = 46; i <= 46; i++) {
+			for (int j = 97; j <= 122; j++) {
 				String m1 = decToHex(i);
 				String m2 = decToHex(j);
 				String x = xor(m1, m2);
-//				System.out.print((char)i + "+");
-//				System.out.print((char)j + "=");
-//				System.out.print(x + "-");
-//				System.out.print(asciiToChar(hexToDec(x)) + " ");
+				// System.out.print(asciiToChar(hexToDec(x)) + " ");
 			}
-//			System.out.println();
+			// System.out.println();
 		}
-		
+
 		String[] cipher = {
 				"315c4eeaa8b5f8aaf9174145bf43e1784b8fa00dc71d885a804e5ee9fa40b16349c146fb778cdf2d3aff021dfff5b403b510d0d0455468aeb98622b137dae857553ccd8883a7bc37520e06e515d22c954eba5025b8cc57ee59418ce7dc6bc41556bdb36bbca3e8774301fbcaa3b83b220809560987815f65286764703de0f3d524400a19b159610b11ef3e",
 				"234c02ecbbfbafa3ed18510abd11fa724fcda2018a1a8342cf064bbde548b12b07df44ba7191d9606ef4081ffde5ad46a5069d9f7f543bedb9c861bf29c7e205132eda9382b0bc2c5c4b45f919cf3a9f1cb74151f6d551f4480c82b2cb24cc5b028aa76eb7b4ab24171ab3cdadb8356f",
@@ -299,30 +391,170 @@ public class OneTimePad {
 				"32510bfbacfbb9befd54415da243e1695ecabd58c519cd4bd90f1fa6ea5ba47b01c909ba7696cf606ef40c04afe1ac0aa8148dd066592ded9f8774b529c7ea125d298e8883f5e9305f4b44f915cb2bd05af51373fd9b4af511039fa2d96f83414aaaf261bda2e97b170fb5cce2a53e675c154c0d9681596934777e2275b381ce2e40582afe67650b13e72287ff2270abcf73bb028932836fbdecfecee0a3b894473c1bbeb6b4913a536ce4f9b13f1efff71ea313c8661dd9a4ce",
 				"315c4eeaa8b5f8bffd11155ea506b56041c6a00c8a08854dd21a4bbde54ce56801d943ba708b8a3574f40c00fff9e00fa1439fd0654327a3bfc860b92f89ee04132ecb9298f5fd2d5e4b45e40ecc3b9d59e9417df7c95bba410e9aa2ca24c5474da2f276baa3ac325918b2daada43d6712150441c2e04f6565517f317da9d3",
 				"271946f9bbb2aeadec111841a81abc300ecaa01bd8069d5cc91005e9fe4aad6e04d513e96d99de2569bc5e50eeeca709b50a8a987f4264edb6896fb537d0a716132ddc938fb0f836480e06ed0fcd6e9759f40462f9cf57f4564186a2c1778f1543efa270bda5e933421cbe88a4a52222190f471e9bd15f652b653b7071aec59a2705081ffe72651d08f822c9ed6d76e48b63ab15d0208573a7eef027",
-				"466d06ece998b7a2fb1d464fed2ced7641ddaa3cc31c9941cf110abbf409ed39598005b3399ccfafb61d0315fca0a314be138a9f32503bedac8067f03adbf3575c3b8edc9ba7f537530541ab0f9f3cd04ff50d66f1d559ba520e89a2cb2a83" };
+				"466d06ece998b7a2fb1d464fed2ced7641ddaa3cc31c9941cf110abbf409ed39598005b3399ccfafb61d0315fca0a314be138a9f32503bedac8067f03adbf3575c3b8edc9ba7f537530541ab0f9f3cd04ff50d66f1d559ba520e89a2cb2a83",
+				"32510ba9babebbbefd001547a810e67149caee11d945cd7fc81a05e9f85aac650e9052ba6a8cd8257bf14d13e6f0a803b54fde9e77472dbff89d71b57bddef121336cb85ccb8f3315f4b52e301d16e9f52f904" };
 
 		int len = cipher.length;
-		String x01 = xor(cipher[0], cipher[1]);
-		String x02 = xor(cipher[0], cipher[2]);
-		String x12 = xor(cipher[1], cipher[2]);
-		String x2 = xor(cipher[2], cipher[3]);
-		String x3 = xor(cipher[4], cipher[5]);
-		String x4 = xor(cipher[6], cipher[7]);
-		String x5 = xor(cipher[8], cipher[9]);
-		System.out.println(findSpaceCandidate(x01, 0, 1));
-		System.out.println(findSpaceCandidate(x02, 0, 2));
-		findSpaceCandidate(x12, 1, 2);
-		findSpaceCandidate(x2, 2, 3);
-		findSpaceCandidate(x2, 2, 3);
-		findSpaceCandidate(x3, 4, 5);
-		findSpaceCandidate(x4, 6, 7);		
-		findSpaceCandidate(x5, 8, 9);
+		// String x01 = xor(cipher[0], cipher[1]);
+		// String x02 = xor(cipher[0], cipher[2]);
+		// String x03 = xor(cipher[0], cipher[3]);
+		// String x04 = xor(cipher[0], cipher[4]);
+		// String x05 = xor(cipher[0], cipher[5]);
+		// String x06 = xor(cipher[0], cipher[6]);
+		// String x07 = xor(cipher[0], cipher[7]);
+		// String x08 = xor(cipher[0], cipher[8]);
+		// String x09 = xor(cipher[0], cipher[9]);
+		// String x2 = xor(cipher[2], cipher[3]);
+		// String x3 = xor(cipher[4], cipher[5]);
+		// String x4 = xor(cipher[6], cipher[7]);
+		// String x5 = xor(cipher[8], cipher[9]);
+		// findSpaceCandidate(x01, 0, 1);
+		// findSpaceCandidate(x02, 0, 2);
+		// findSpaceCandidate(x03, 0, 3);
+		// findSpaceCandidate(x04, 0, 4);
+		// findSpaceCandidate(x05, 0, 5);
+		// findSpaceCandidate(x06, 0, 6);
+		// findSpaceCandidate(x07, 0, 7);
+		// findSpaceCandidate(x08, 0, 8);
+		// findSpaceCandidate(x09, 0, 9);
 
-//		System.out.println(asciiToChar(hexToDec(x1, 1)));
-//		splitHex(x1);
-		for (int i = 0; i < len; i++) {
-//			findSpace(splitHex(cipher[i]), splitHex(xored), i);
-//			System.out.println("---------------");
-		}
+		int[] space_0 = { 2, 6, 13, 17, 24, 27, 32, 40, 51, 54, 58, 63, 74, 84,
+				89, 91, 103, 106, 111 };
+		String spaces_0 = genSpaceStr(space_0);
+		String key_0 = xor(cipher[0], spaces_0);
+		extractKey(key_0, space_0);
+
+		// String x12 = xor(cipher[1], cipher[2]);
+		// String x13 = xor(cipher[1], cipher[3]);
+		// String x14 = xor(cipher[1], cipher[4]);
+		// String x15 = xor(cipher[1], cipher[5]);
+		// String x16 = xor(cipher[1], cipher[6]);
+		// String x17 = xor(cipher[1], cipher[7]);
+		// String x18 = xor(cipher[1], cipher[8]);
+		// String x19 = xor(cipher[1], cipher[9]);
+		// findSpaceCandidate(x12, 1, 2);
+		// findSpaceCandidate(x13, 1, 3);
+		// findSpaceCandidate(x14, 1, 4);
+		// findSpaceCandidate(x15, 1, 5);
+		// findSpaceCandidate(x16, 1, 6);
+		// findSpaceCandidate(x17, 1, 7);
+		// findSpaceCandidate(x18, 1, 8);
+		// findSpaceCandidate(x19, 1, 9);
+
+		int[] space_1 = { 5, 11, 26, 39, 47, 55, 64, 70, 73, 80, 82, 93 };
+		String spaces_1 = genSpaceStr(space_1);
+		String key_1 = xor(cipher[1], spaces_1);
+		extractKey(key_1, space_1);
+
+		// String x23 = xor(cipher[2], cipher[3]);
+		// String x24 = xor(cipher[2], cipher[4]);
+		// String x25 = xor(cipher[2], cipher[5]);
+		// String x26 = xor(cipher[2], cipher[6]);
+		// String x27 = xor(cipher[2], cipher[7]);
+		// String x28 = xor(cipher[2], cipher[8]);
+		// String x29 = xor(cipher[2], cipher[9]);
+		// findSpaceCandidate(x23, 2, 3);
+		// findSpaceCandidate(x24, 2, 4);
+		// findSpaceCandidate(x25, 2, 5);
+		// findSpaceCandidate(x26, 2, 6);
+		// findSpaceCandidate(x27, 2, 7);
+		// findSpaceCandidate(x28, 2, 8);
+		// findSpaceCandidate(x29, 2, 9);
+		int[] space_2 = { 8, 20, 31, 35, 38, 53, 57, 63, 65, 69, 72, 78, 83,
+				89, 94 };
+		String spaces_2 = genSpaceStr(space_2);
+		String key_2 = xor(cipher[2], spaces_2);
+		extractKey(key_2, space_2);
+
+		// String x34 = xor(cipher[3], cipher[4]);
+		// String x35 = xor(cipher[3], cipher[5]);
+		// String x36 = xor(cipher[3], cipher[6]);
+		// String x37 = xor(cipher[3], cipher[7]);
+		// String x38 = xor(cipher[3], cipher[8]);
+		// String x39 = xor(cipher[3], cipher[9]);
+		// findSpaceCandidate(x34, 3, 4);
+		// findSpaceCandidate(x35, 3, 5);
+		// findSpaceCandidate(x36, 3, 6);
+		// findSpaceCandidate(x37, 3, 7);
+		// findSpaceCandidate(x38, 3, 8);
+		// findSpaceCandidate(x39, 3, 9);
+
+		int[] space_3 = { 26, 28, 33, 44, 54, 60, 63, 68, 71, 82, 91, 94, 96,
+				103 };
+		String spaces_3 = genSpaceStr(space_3);
+		String key_3 = xor(cipher[3], spaces_3);
+		extractKey(key_3, space_3);
+
+		// String x45 = xor(cipher[4], cipher[5]);
+		// String x46 = xor(cipher[4], cipher[6]);
+		// String x47 = xor(cipher[4], cipher[7]);
+		// String x48 = xor(cipher[4], cipher[8]);
+		// String x49 = xor(cipher[4], cipher[9]);
+		// findSpaceCandidate(x45, 4, 5);
+		// findSpaceCandidate(x46, 4, 6);
+		// findSpaceCandidate(x47, 4, 7);
+		// findSpaceCandidate(x48, 4, 8);
+		// findSpaceCandidate(x49, 4, 9);
+
+		int[] space_4 = { 3, 14, 17, 21, 23, 27, 30, 34, 39, 44, 46, 50, 54,
+				69, 78, 83, 85, 90, 111, 114 };
+		String spaces_4 = genSpaceStr(space_4);
+		String key_4 = xor(cipher[4], spaces_4);
+		extractKey(key_4, space_4);
+
+		// String x56 = xor(cipher[5], cipher[6]);
+		// String x57 = xor(cipher[5], cipher[7]);
+		// String x58 = xor(cipher[5], cipher[8]);
+		// String x59 = xor(cipher[5], cipher[9]);
+		// findSpaceCandidate(x56, 5, 6);
+		// findSpaceCandidate(x57, 5, 7);
+		// findSpaceCandidate(x58, 5, 8);
+		// findSpaceCandidate(x59, 5, 9);
+
+		int[] space_5 = { 4, 9, 37, 42, 48, 53, 76, 81, 100, 105, 116 };
+		String spaces_5 = genSpaceStr(space_5);
+		String key_5 = xor(cipher[5], spaces_5);
+		extractKey(key_5, space_5);
+
+		// String x67 = xor(cipher[6], cipher[7]);
+		// String x68 = xor(cipher[6], cipher[8]);
+		// String x69 = xor(cipher[6], cipher[9]);
+		// findSpaceCandidate(x67, 6, 7);
+		// findSpaceCandidate(x68, 6, 8);
+		// findSpaceCandidate(x69, 6, 9);
+		int[] space_6 = { 5, 9, 13, 19, 22, 39, 44, 51, 55, 69, 73, 79, 85, 88,
+				102 };
+		String spaces_6 = genSpaceStr(space_6);
+		String key_6 = xor(cipher[6], spaces_6);
+		extractKey(key_6, space_6);
+
+		// String x78 = xor(cipher[7], cipher[8]);
+		// String x79 = xor(cipher[7], cipher[9]);
+		// findSpaceCandidate(x78, 7, 8);
+		// findSpaceCandidate(x79, 7, 9);
+
+		int[] space_7 = { 2, 6, 10, 14, 20, 26, 30, 38, 46, 49, 51, 57, 61, 69,
+				73, 82, 87, 93, 114 };
+		String spaces_7 = genSpaceStr(space_7);
+		String key_7 = xor(cipher[7], spaces_7);
+		extractKey(key_7, space_7);
+
+		// String x89 = xor(cipher[8], cipher[9]);
+		// findSpaceCandidate(x89, 8, 9);
+
+		int[] space_8 = { 1, 15, 16, 27, 41, 43, 55, 62, 64, 78, 89, 102 };
+		String spaces_8 = genSpaceStr(space_8);
+		String key_8 = xor(cipher[8], spaces_8);
+		extractKey(key_8, space_8);
+
+		int[] space_9 = { 0, 4, 12, 29, 36, 45, 52, 59, 66, 67, 75, 77 };
+		String spaces_9 = genSpaceStr(space_9);
+		String key_9 = xor(cipher[9], spaces_9);
+		extractKey(key_9, space_9);
+
+		String test = buildKey();
+		System.out.println(test);
+		String see = xor(test, cipher[10]);
+		System.out.println(asciiToChar(hexToDec(see, 1)));
 	}
 }
